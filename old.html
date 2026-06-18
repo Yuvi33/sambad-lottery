@@ -25,8 +25,11 @@
     </div>
 
     <script>
-        fetch('./data/history.json')
-            .then(res => res.json())
+        fetch('/data/history.json')
+            .then(res => {
+                if (!res.ok) throw new Error('History file not found');
+                return res.json();
+            })
             .then(dates => {
                 const list = document.getElementById('history-list');
                 list.innerHTML = '';
@@ -35,9 +38,12 @@
                 dates.forEach(date => {
                     const div = document.createElement('div');
                     div.className = 'date-card';
-                    div.innerHTML = `<a href="result.html?date=${date}">Lottery Result - ${date}</a>`;
+                    div.innerHTML = `<a href="/result.html?date=${date}">Lottery Result - ${date}</a>`;
                     list.appendChild(div);
                 });
+            })
+            .catch(err => {
+                document.getElementById('history-list').innerHTML = `<p style="color:red;">Error: ${err.message}</p>`;
             });
     </script>
 </body>
