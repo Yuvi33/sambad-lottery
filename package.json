@@ -1,0 +1,14 @@
+{
+  "name": "lottery-website",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "astro build",
+    "dev": "astro dev"
+  },
+  "dependencies": {
+    "astro": "^4.0.0",
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12",
+    "date-fns": "^3.0.0"
+  }
+}
