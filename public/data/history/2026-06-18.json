@@ -1,26 +1,34 @@
 {
-  "nagaland": [
+  "lottery_sambad": [
     {
       "date": "2026-06-18",
       "time": "1:00 PM",
-      "drawName": "Sample Draw (Update Scraper Later)",
+      "drawName": "Dear Lottery",
       "winningNumbers": [
-        "41071"
+        "46G 93135"
       ],
       "prize": "1 Crore",
-      "source": "Nagaland State Lottery"
-    }
-  ],
-  "kerala": [
+      "source": "Lottery Sambad"
+    },
     {
       "date": "2026-06-18",
-      "time": "3",
-      "drawName": "Sample Draw (Update Scraper Later)",
+      "time": "6:00 PM",
+      "drawName": "Dear Lottery",
       "winningNumbers": [
-        "83313"
+        "90B 35305"
       ],
       "prize": "1 Crore",
-      "source": "Kerala State Lottery"
+      "source": "Lottery Sambad"
+    },
+    {
+      "date": "2026-06-18",
+      "time": "8:00 PM",
+      "drawName": "Dear Lottery",
+      "winningNumbers": [
+        "70H 59699"
+      ],
+      "prize": "1 Crore",
+      "source": "Lottery Sambad"
     }
   ]
 }
