@@ -9,19 +9,21 @@ async function updateResults() {
       headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' }
     });
 
-    // Extract the hidden JSON data
-    const match = response.data.match(/var datesCards = ({.*?});/);
-    if (!match) throw new Error('Could not find data');
+    // Extract the hidden JSON data (Improved Regex to handle line breaks)
+    const match = response.data.match(/var datesCards = (\{[\s\S]*?\});/);
+    if (!match) throw new Error('Could not find data pattern');
 
     const fullData = JSON.parse(match[1]);
-    const dataDir = path.join(__dirname, '../../public/data');
+    
+    // Save to /data instead of /public/data
+    const dataDir = path.join(__dirname, '../../data');
     fs.mkdirSync(dataDir, { recursive: true });
 
-    // 1. Save ALL data (Today + Yesterday) to latest.json so 1PM, 6PM, 8PM show
+    // 1. Save ALL data to latest.json
     fs.writeFileSync(path.join(dataDir, 'latest.json'), JSON.stringify(fullData, null, 2));
     console.log('✅ Saved 1PM, 6PM, and 8PM data!');
 
-    // 2. Update History Manifest & Save Individual Date Files
+    // 2. Update History Manifest
     const manifestPath = path.join(dataDir, 'history.json');
     let manifest = [];
     if (fs.existsSync(manifestPath)) manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
