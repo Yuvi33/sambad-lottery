@@ -12,7 +12,7 @@
         h1{text-align:center;color:#333;margin-bottom:20px}
         .date-card{background:#fff;border:1px solid #ddd;padding:15px;margin:10px 0;border-radius:8px;text-decoration:none;color:inherit;display:block}
         .date-head{font-weight:800;color:#e63223;font-size:18px;margin-bottom:10px;border-bottom:1px solid #eee;padding-bottom:5px}
-        .res-row{display:flex;gap:10px;flex-wrap:wrap}
+        .res-row{display:flex;gap:15px;flex-wrap:wrap}
         .res-badge{display:inline-block;padding:4px 8px;border-radius:4px;font-size:12px;font-weight:800;color:#fff}
         .b-1pm{background:#16a34a}.b-6pm{background:#f5c518;color:#dc2626 !important}.b-8pm{background:#dc2626}
         .ad-slot{width:100%;min-height:100px;background:#eee;display:flex;align-items:center;justify-content:center;color:#888;margin:20px 0;border-radius:8px}
@@ -28,34 +28,34 @@
     </div>
 
     <script>
-        fetch('/data/latest.json')
+        fetch('/data/history.json')
             .then(res => res.json())
             .then(data => {
                 const list = document.getElementById('history-list');
                 list.innerHTML = '';
+                if(data.length === 0) { list.innerHTML = '<p>No history available yet.</p>'; return; }
                 
-                const dates = Object.keys(data).sort((a, b) => {
-                    const da = a.split('-').reverse().join('');
-                    const db = b.split('-').reverse().join('');
-                    return db.localeCompare(da);
-                });
-                
-                if(dates.length === 0) { list.innerHTML = '<p>No history available yet.</p>'; return; }
-                
-                dates.forEach(date => {
-                    const results = data[date];
+                // data is now an array of objects: [{ date: "18-06-2026", results: [...] }, ...]
+                data.forEach(item => {
                     const div = document.createElement('a');
-                    div.href = `/result.html?date=${date}`;
+                    div.href = `/result.html?date=${item.date}`;
                     div.className = 'date-card';
                     
                     let resultsHtml = '';
-                    results.forEach(r => {
-                        resultsHtml += `<div><span class="res-badge b-${r.slotkey}">${r.slotkey.toUpperCase()}</span> <strong>${r.num}</strong></div>`;
-                    });
+                    if (item.results && item.results.length > 0) {
+                        item.results.forEach(r => {
+                            resultsHtml += `<div><span class="res-badge b-${r.slotkey}">${r.slotkey.toUpperCase()}</span> <strong>${r.num}</strong></div>`;
+                        });
+                    } else {
+                        resultsHtml = 'Click to view results';
+                    }
                     
-                    div.innerHTML = `<div class="date-head">Lottery Result - ${date}</div><div class="res-row">${resultsHtml}</div>`;
+                    div.innerHTML = `<div class="date-head">Lottery Result - ${item.date}</div><div class="res-row">${resultsHtml}</div>`;
                     list.appendChild(div);
                 });
+            })
+            .catch(err => {
+                document.getElementById('history-list').innerHTML = `<p style="color:red;">Error loading history.</p>`;
             });
     </script>
 </body>
