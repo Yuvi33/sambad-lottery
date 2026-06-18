@@ -4,33 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lottery Sambad Result</title>
-    <meta name="description" content="View old Lottery Sambad draw results. Check 1 PM, 6 PM, and 8 PM winning numbers for specific dates.">
     <style>
-        *{margin:0;padding:0;box-sizing:border-box}body{font:16px/1.7 system-ui,-apple-system,sans-serif;color:#333;background:#fff}
-        a{color:#2563eb;text-decoration:underline}
-        nav{background:#e63223;padding:15px 0}.nav-in{max-width:900px;margin:0 auto;padding:0 16px;display:flex;justify-content:space-between;align-items:center}
-        .nav-logo{color:#fff;font-weight:800;font-size:24px;text-transform:uppercase;text-decoration:none}
-        .nav-link{color:#fff;font-weight:700;text-decoration:none;background:rgba(0,0,0,.2);padding:8px 15px;border-radius:5px}
+        *{margin:0;padding:0;box-sizing:border-box}body{font:16px/1.7 system-ui,sans-serif;color:#333;background:#fff}
+        nav{background:#e63223;padding:15px 0;text-align:center}
+        nav a{color:#fff;font-weight:800;font-size:24px;text-decoration:none;text-transform:uppercase}
         .w{max-width:800px;margin:0 auto;padding:20px}
         .result-card{background:#fff;border:1px solid #e3e7ec;border-radius:8px;padding:20px;margin:15px auto;text-align:center;max-width:500px}
         .time-badge{display:inline-block;font-size:14px;font-weight:800;padding:6px 12px;border-radius:9px;margin-bottom:10px}
         .win-num{font:900 38px/1 "Arial Black",sans-serif;margin:15px 0;letter-spacing:1px}
         .prize-text{color:#138808;font-weight:800;font-size:18px}
         .meta-text{color:#647281;font-size:13px;margin-top:5px}
-        /* Colors for slots */
         .slot-1pm{background:#f6fbef}.slot-1pm .win-num{color:#138808}.slot-1pm .time-badge{background:#16a34a;color:#ffdd00}
         .slot-6pm{background:#e3eefb}.slot-6pm .win-num{color:#100177}.slot-6pm .time-badge{background:#f5c518;color:#dc2626}
         .slot-8pm{background:#fef6f6}.slot-8pm .win-num{color:#dc2626}.slot-8pm .time-badge{background:#dc2626;color:#ffdd00}
-        .ad-slot{width:100%;min-height:90px;background:#f1f1f1;display:flex;align-items:center;justify-content:center;color:#888;margin:20px 0;border-radius:8px;font-size:0.9rem}
+        .ad-slot{width:100%;min-height:90px;background:#f1f1f1;display:flex;align-items:center;justify-content:center;color:#888;margin:20px 0;border-radius:8px}
     </style>
 </head>
 <body>
-    <nav>
-        <div class="nav-in">
-            <a href="/" class="nav-logo">Lottery Sambad</a>
-            <a href="/old.html" class="nav-link">Old Results</a>
-        </div>
-    </nav>
+    <nav><a href="/">Lottery Sambad</a></nav>
 
     <div class="w">
         <div class="ad-slot">Advertisement</div>
@@ -41,10 +32,8 @@
     </div>
 
     <script>
-        // Get date from URL (e.g., result.html?date=18-06-2026)
         const params = new URLSearchParams(window.location.search);
         const date = params.get('date');
-
         const contentDiv = document.getElementById('result-content');
 
         if (!date) {
@@ -52,16 +41,13 @@
         } else {
             document.title = `Lottery Sambad Result ${date}`;
             
-            // Fetch the specific date's JSON file
-            fetch(`./data/history/${date}.json`)
+            fetch(`/data/history/${date}.json`)
                 .then(response => {
-                    if(!response.ok) throw new Error('Result not found');
+                    if(!response.ok) throw new Error('Result file not found');
                     return response.json();
                 })
                 .then(data => {
                     let html = `<h2 style="margin-bottom:20px;">Lottery Result for ${date}</h2>`;
-                    
-                    // Loop through the results (1pm, 6pm, 8pm)
                     data.forEach(result => {
                         html += `
                             <div class="result-card slot-${result.slotkey}">
@@ -75,7 +61,7 @@
                     contentDiv.innerHTML = html;
                 })
                 .catch(error => {
-                    contentDiv.innerHTML = `<p>Result for ${date} not found or still being scraped.</p><p><a href="/old.html">Go back</a></p>`;
+                    contentDiv.innerHTML = `<p style="color:red;">Error: ${error.message}</p><p><a href="/old.html">Go back</a></p>`;
                 });
         }
     </script>
