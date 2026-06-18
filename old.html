@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Old Lottery Sambad Results - Archive</title>
+    <meta name="description" content="Browse historical Lottery Sambad results. Check past 1 PM, 6 PM, and 8 PM draw results.">
+    <style>
+        body{font-family:system-ui,sans-serif;background:#f9f9f9;margin:0;padding:0}
+        .w{max-width:800px;margin:0 auto;padding:20px}
+        nav{background:#e63223;padding:15px;text-align:center}
+        nav a{color:#fff;font-weight:800;font-size:24px;text-decoration:none;text-transform:uppercase}
+        h1{text-align:center;color:#333;margin-bottom:20px}
+        .date-card{background:#fff;border:1px solid #ddd;padding:15px;margin:10px 0;border-radius:8px;display:flex;justify-content:space-between;align-items:center}
+        .date-card a{color:#e63223;font-weight:700;text-decoration:none}
+        .ad-slot{width:100%;min-height:100px;background:#eee;display:flex;align-items:center;justify-content:center;color:#888;margin:20px 0;border-radius:8px}
+    </style>
+</head>
+<body>
+    <nav><a href="/">Lottery Sambad</a></nav>
+    <div class="w">
+        <h1>Old Results Archive</h1>
+        <div class="ad-slot">Advertisement</div>
+        <div id="history-list">Loading dates...</div>
+        <div class="ad-slot">Advertisement</div>
+    </div>
+
+    <script>
+        fetch('public/data/history.json')
+            .then(res => res.json())
+            .then(dates => {
+                const list = document.getElementById('history-list');
+                list.innerHTML = '';
+                if(dates.length === 0) { list.innerHTML = '<p>No history available yet.</p>'; return; }
+                
+                dates.forEach(date => {
+                    const div = document.createElement('div');
+                    div.className = 'date-card';
+                    div.innerHTML = `<span>Lottery Result Date:</span> <a href="result.html?date=${date}">${date}</a>`;
+                    list.appendChild(div);
+                });
+            });
+    </script>
+</body>
+</html>
