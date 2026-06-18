@@ -1,0 +1,35 @@
+name: Update Lottery Results
+
+on:
+  schedule:
+    # Run at 1:30 PM, 6:30 PM, and 8:30 PM IST (adjust times as needed)
+    - cron: '30 8 * * *'    # 1:30 PM IST = 8:00 AM UTC
+    - cron: '30 13 * * *'   # 6:30 PM IST = 1:00 PM UTC  
+    - cron: '30 15 * * *'   # 8:30 PM IST = 3:00 PM UTC
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  scrape-and-update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run lottery scraper
+        run: node src/scraper/lotteryScraper.js
+        
+      - name: Commit and push results
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add public/data/
+          git commit -m "🔄 Update lottery results - $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+          git push
