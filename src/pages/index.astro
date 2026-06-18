@@ -1,0 +1,167 @@
+---
+import Layout from '../layouts/Layout.astro';
+import fs from 'fs';
+import path from 'path';
+
+// Fetch latest results
+const dataPath = path.join(process.cwd(), 'public/data/latest.json');
+let results = {};
+
+try {
+  results = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
+} catch (error) {
+  console.log('No results found yet');
+}
+
+const today = new Date().toLocaleDateString('en-IN', {
+  weekday: 'long',
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+});
+---
+
+<Layout title="Lottery Sambad Today">
+  <main class="container">
+    <h1>Lottery Sambad Today</h1>
+    <p class="date">{today}</p>
+    
+    <!-- Results Display -->
+    <div class="results-container">
+      {Object.entries(results).map(([source, sourceResults]) => (
+        <section class="source-section">
+          <h2>{sourceResults[0]?.source || source}</h2>
+          
+          <div class="results-grid">
+            {sourceResults.map((result, index) => (
+              <div class="result-card" data-time={result.time}>
+                <div class="time-badge">{result.time}</div>
+                <h3>{result.drawName}</h3>
+                <div class="winning-numbers">
+                  {result.winningNumbers.map(num => (
+                    <span class="number">{num}</span>
+                  ))}
+                </div>
+                <p class="prize">1st Prize: ₹{result.prize}</p>
+                <a href={`/pdfs/${result.date}-${result.time}.pdf`} class="pdf-link">
+                  Download PDF
+                </a>
+              </div>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+    
+    <!-- Old Results Section -->
+    <section class="old-results">
+      <h2>Old Results</h2>
+      <div class="history-links">
+        <div id="history-container">Loading...</div>
+      </div>
+    </section>
+    
+    <!-- Ticket Scanner Placeholder -->
+    <section class="scanner">
+      <h2>Scan Your Ticket</h2>
+      <p>Point your camera at the ticket</p>
+      <div class="scanner-placeholder">
+        <div class="scanner-box">
+          <span>Camera Scanner</span>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+  .date { font-size: 1.2rem; color: #666; margin-bottom: 30px; }
+  
+  .results-container { margin: 40px 0; }
+  .source-section { margin-bottom: 50px; }
+  
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  
+  .result-card {
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  
+  .time-badge {
+    display: inline-block;
+    background: #007bff;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+  
+  .winning-numbers {
+    display: flex;
+    gap: 10px;
+    margin: 15px 0;
+    flex-wrap: wrap;
+  }
+  
+  .number {
+    background: #f8f9fa;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-weight: bold;
+    border: 1px solid #dee2e6;
+  }
+  
+  .prize { color: #28a745; font-weight: bold; }
+  
+  .pdf-link {
+    display: inline-block;
+    margin-top: 15px;
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .scanner { margin: 50px 0; text-align: center; }
+  .scanner-placeholder {
+    max-width: 500px;
+    margin: 0 auto;
+    aspect-ratio: 4/3;
+    background: #f0f0f0;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .scanner-box { text-align: center; }
+</style>
+
+<script>
+  // Load historical results
+  async function loadHistory() {
+    try {
+      const response = await fetch('/data/latest.json');
+      const data = await response.json();
+      
+      document.getElementById('history-container').innerHTML = `
+        <p>Historical results will appear here</p>
+        <p><small>Update the scraper to generate historical data</small></p>
+      `;
+    } catch (error) {
+      console.error('Error loading history:', error);
+      document.getElementById('history-container').innerHTML = `
+        <p>Unable to load historical results</p>
+      `;
+    }
+  }
+  
+  // Initialize
+  loadHistory();
+</script>
