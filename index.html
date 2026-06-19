@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO Meta Tags -->
     <title>Lottery Sambad Today Nagaland State 1 PM, 6 PM & 8 PM Result</title>
-    <meta name="description" content="Lottery Sambad Result Today 1 PM, 6 PM, 8 PM. Check Nagaland State Dear Lottery live result.">
+    <meta name="description" content="Lottery Sambad Result Today 1 PM, 6 PM, 8 PM. Check Nagaland State Dear Lottery live result, old result and winner list.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://sambad-lottery.pages.dev/">
+    
     <style>
         *{margin:0;padding:0;box-sizing:border-box}body{font:16px/1.7 system-ui,sans-serif;color:#333;background:#fff}
         a{color:#2563eb;text-decoration:underline}.w{max-width:900px;margin:0 auto;padding:0 16px}
@@ -12,6 +16,7 @@
         .nav-logo{color:#fff;font-weight:800;font-size:24px;text-transform:uppercase;text-decoration:none}
         .nav-link{color:#fff;font-weight:700;text-decoration:none;background:rgba(0,0,0,.2);padding:8px 15px;border-radius:5px}
         
+        h1{font-size:22px;color:#1e3a5f;margin:20px 0;text-align:center}
         .tabs{display:flex;gap:10px;max-width:500px;margin:20px auto;padding:0 16px}
         .tab-btn{flex:1;padding:15px;border:none;border-radius:8px;background:#f1f1f1;color:#333;font-weight:800;font-size:18px;cursor:pointer;text-transform:uppercase}
         .tab-btn.active{background:#138808;color:#fff}
@@ -25,7 +30,6 @@
         .slot-6pm .rcard__num{color:#100177}.slot-6pm .rcard__date{background:#f5c518;color:#dc2626}
         .slot-8pm .rcard__num{color:#dc2626}.slot-8pm .rcard__date{background:#dc2626;color:#ffdd00}
         
-        /* Full Result Tiers */
         .tiers-container{text-align:left;margin-top:20px;border-top:1px solid #eee;padding-top:20px}
         .tier-box{background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:15px;margin-bottom:15px}
         .tier-head{display:flex;justify-content:space-between;border-bottom:1px dashed #ccc;padding-bottom:8px;margin-bottom:10px}
@@ -42,6 +46,16 @@
         .ad-slot{width:100%;min-height:90px;background:#f1f1f1;display:flex;align-items:center;justify-content:center;color:#888;margin:20px 0;border-radius:8px;font-size:0.9rem}
         .home-art{max-width:800px;margin:30px auto;padding:0 16px;color:#3f4754}.home-art p{margin-bottom:14px}
         .faq{background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:16px 20px;margin:16px 0}
+        footer{background:#f3f4f6; padding:30px 16px; margin-top:40px; text-align:center; font-size:14px; color:#666;}
+        
+        /* Media Queries for Mobile SEO */
+        @media (max-width: 600px) {
+            h1{font-size:18px}
+            .rcard__num{font-size:32px}
+            .tab-btn{font-size:16px;padding:12px 5px}
+            table{font-size:13px}
+            th, td{padding:8px 6px}
+        }
     </style>
 </head>
 <body>
@@ -53,6 +67,9 @@
     </nav>
 
     <div class="w">
+        <!-- H1 TAG FOR SEO -->
+        <h1>Lottery Sambad Today Result 1 PM, 6 PM & 8 PM</h1>
+        
         <div class="ad-slot">Advertisement (Top Banner)</div>
         
         <div class="tabs">
@@ -69,9 +86,26 @@
         
         <div class="home-art">
             <div class="ad-slot">Advertisement (In-Content)</div>
-            <h2 style="text-align:left;">Lottery Sambad Result Today</h2>
+            <h2>Lottery Sambad Result Today</h2>
             <p><strong>Lottery Sambad</strong> today result. The <strong>1:00 PM</strong>, <strong>6:00 PM</strong> and <strong>8:00 PM</strong> result is updated daily.</p>
+            
+            <h2>Frequently Asked Questions (FAQ)</h2>
+            <h3>Is Nagaland State lottery real?</h3>
+            <div class="faq"><p>Yes, Nagaland State Lottery is 100% real. It is owned and regulated by the Government of Nagaland, established in 1972 under the Lotteries (Regulation) Act, 1998.</p></div>
+
+            <h3>How much time will it take to get money after winning the lottery?</h3>
+            <div class="faq"><p>After winning a prize, it takes approximately three days to receive the prize money after submission of all required documents along with the original winning ticket to the Nagaland State Lottery office.</p></div>
         </div>
+        
+        <footer>
+            <p>&copy; 2026 Lottery Sambad Today. All rights reserved.</p>
+            <p style="margin-top:10px;">
+                <a href="/privacy-policy.html">Privacy Policy</a> | 
+                <a href="/disclaimer.html">Disclaimer</a> | 
+                <a href="/about-us.html">About Us</a> | 
+                <a href="/contact-us.html">Contact Us</a>
+            </p>
+        </footer>
     </div>
 
     <script>
@@ -86,16 +120,15 @@
         }
 
         function getLatestSlot() {
-            // Get current time in IST (UTC+5:30)
             const now = new Date();
             const istOffset = 5.5 * 60 * 60 * 1000;
             const istTime = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + istOffset);
             const hour = istTime.getHours();
             
-            if (hour >= 20) return '8pm';   // After 8 PM show 8pm
-            if (hour >= 18) return '6pm';   // After 6 PM show 6pm
-            if (hour >= 13) return '1pm';   // After 1 PM show 1pm
-            return '8pm'; // Before 1 PM, show yesterday's 8pm
+            if (hour >= 20) return '8pm';
+            if (hour >= 18) return '6pm';
+            if (hour >= 13) return '1pm';
+            return '8pm';
         }
 
         function showSlot(slot) {
@@ -158,82 +191,37 @@
         ]).then(([latest, summary]) => {
             allData = latest;
             summaryData = summary;
-            const defaultSlot = getLatestSlot(); // Auto-select tab based on time
+            const defaultSlot = getLatestSlot();
             showSlot(defaultSlot);
         }).catch(err => {
             document.getElementById('card-container').innerHTML = `<div class="rcard"><div class="rcard__num" style="color:red; font-size:16px;">Error loading data</div></div>`;
         });
     </script>
-            <!-- ADSENSE & SEO: FAQ Section -->
-        <div class="home-art">
-            <h2>Frequently Asked Questions (FAQ)</h2>
-            
-            <h3>Is Nagaland State lottery real?</h3>
-            <div class="faq">
-                <p>Yes, Nagaland State Lottery is 100% real. It is owned and regulated by the Government of Nagaland, established in 1972 under the Lotteries (Regulation) Act, 1998. The draws are conducted transparently under government supervision.</p>
-            </div>
-
-            <h3>How much time will it take to get money after winning the lottery?</h3>
-            <div class="faq">
-                <p>After winning a prize, it takes approximately three days to receive the prize money after submission of all required documents along with the original winning ticket to the Nagaland State Lottery office. For prizes above ₹10,000, a government-issued ID proof is mandatory.</p>
-            </div>
-
-            <h3>Where can I check the Lottery Sambad result?</h3>
-            <div class="faq">
-                <p>You can check the daily Lottery Sambad results right here on our website. We update the 1 PM, 6 PM, and 8 PM results daily. You can also download the PDF or check old results from our archive.</p>
-            </div>
-
-            <h3>What is the price of a Nagaland State Lottery ticket?</h3>
-            <div class="faq">
-                <p>The price of a Nagaland State Dear Lottery ticket is ₹6 for the standard daily draws. Bumper draws may cost more.</p>
-            </div>
-        </div>
-
-        <!-- ADSENSE: Mandatory Footer Links -->
-        <footer style="background:#f3f4f6; padding:30px 16px; margin-top:40px; text-align:center; font-size:14px; color:#666;">
-            <p>&copy; 2026 Lottery Sambad Today. All rights reserved.</p>
-            <p style="margin-top:10px;">
-                <a href="/privacy-policy.html">Privacy Policy</a> | 
-                <a href="/disclaimer.html">Disclaimer</a> | 
-                <a href="/about-us.html">About Us</a> | 
-                <a href="/contact-us.html">Contact Us</a>
-            </p>
-        </footer>
-
-        <!-- SEO: FAQ Schema Markup for Google Search -->
-        <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            "mainEntity": [
-                {
-                    "@type": "Question",
-                    "name": "Is Nagaland State lottery real?",
-                    "acceptedAnswer": {
-                        "@type": "Answer",
-                        "text": "Yes, Nagaland State Lottery is 100% real. It is owned and regulated by the Government of Nagaland, established in 1972 under the Lotteries (Regulation) Act, 1998."
-                    }
-                },
-                {
-                    "@type": "Question",
-                    "name": "How much time will it take to get money after winning the lottery?",
-                    "acceptedAnswer": {
-                        "@type": "Answer",
-                        "text": "It takes approximately three days to receive the prize money after submission of all required documents along with the original winning ticket to the Nagaland State Lottery office."
-                    }
-                },
-                {
-                    "@type": "Question",
-                    "name": "Where can I check the Lottery Sambad result?",
-                    "acceptedAnswer": {
-                        "@type": "Answer",
-                        "text": "You can check the daily Lottery Sambad results right here on our website. We update the 1 PM, 6 PM, and 8 PM results daily."
-                    }
+    
+    <!-- SEO: FAQ Schema Markup -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Is Nagaland State lottery real?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, Nagaland State Lottery is 100% real. It is owned and regulated by the Government of Nagaland, established in 1972 under the Lotteries (Regulation) Act, 1998."
                 }
-            ]
-        }
-        </script>
-    </body>
-    </html>
+            },
+            {
+                "@type": "Question",
+                "name": "How much time will it take to get money after winning the lottery?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "It takes approximately three days to receive the prize money after submission of all required documents along with the original winning ticket to the Nagaland State Lottery office."
+                }
+            }
+        ]
+    }
+    </script>
 </body>
 </html>
