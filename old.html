@@ -10,6 +10,8 @@
         nav a{color:#fff;font-weight:800;font-size:24px;text-decoration:none;text-transform:uppercase}
         .w{max-width:800px;margin:0 auto;padding:20px}
         h1{text-align:center;color:#333;margin-bottom:20px}
+        .controls{text-align:center;margin-bottom:20px;display:flex;gap:10px;justify-content:center}
+        select{padding:10px;font-size:16px;border-radius:8px;border:1px solid #ccc}
         .date-card{background:#fff;border:1px solid #ddd;padding:15px;margin:10px 0;border-radius:8px;text-decoration:none;color:inherit;display:block}
         .date-head{font-weight:800;color:#e63223;font-size:18px;margin-bottom:10px;border-bottom:1px solid #eee;padding-bottom:5px}
         .res-row{display:flex;gap:15px;flex-wrap:wrap}
@@ -23,40 +25,77 @@
     <div class="w">
         <h1>Old Results Archive</h1>
         <div class="ad-slot">Advertisement</div>
-        <div id="history-list">Loading dates...</div>
+        
+        <div class="controls">
+            <select id="year-sel" onchange="loadHistory()">
+                <option value="2026">2026</option>
+                <option value="2025">2025</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+            </select>
+            <select id="month-sel" onchange="loadHistory()">
+                <option value="01">January</option>
+                <option value="02">February</option>
+                <option value="03">March</option>
+                <option value="04">April</option>
+                <option value="05">May</option>
+                <option value="06">June</option>
+                <option value="07">July</option>
+                <option value="08">August</option>
+                <option value="09">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+            </select>
+        </div>
+        
+        <div id="history-list">Select a month to load results...</div>
         <div class="ad-slot">Advertisement</div>
     </div>
 
     <script>
-        fetch('/data/history.json')
-            .then(res => res.json())
-            .then(data => {
-                const list = document.getElementById('history-list');
-                list.innerHTML = '';
-                if(data.length === 0) { list.innerHTML = '<p>No history available yet.</p>'; return; }
-                
-                // data is now an array of objects: [{ date: "18-06-2026", results: [...] }, ...]
-                data.forEach(item => {
-                    const div = document.createElement('a');
-                    div.href = `/result.html?date=${item.date}`;
-                    div.className = 'date-card';
+        function loadHistory() {
+            const year = document.getElementById('year-sel').value;
+            const month = document.getElementById('month-sel').value;
+            const list = document.getElementById('history-list');
+            list.innerHTML = '<p>Loading...</p>';
+            
+            fetch(`/data/history/${year}-${month}.json`)
+                .then(res => {
+                    if(!res.ok) throw new Error('No data found for this month');
+                    return res.json();
+                })
+                .then(data => {
+                    list.innerHTML = '';
+                    if(data.length === 0) { list.innerHTML = '<p>No history available for this month.</p>'; return; }
                     
-                    let resultsHtml = '';
-                    if (item.results && item.results.length > 0) {
-                        item.results.forEach(r => {
-                            resultsHtml += `<div><span class="res-badge b-${r.slotkey}">${r.slotkey.toUpperCase()}</span> <strong>${r.num}</strong></div>`;
-                        });
-                    } else {
-                        resultsHtml = 'Click to view results';
-                    }
+                    // Sort newest first
+                    data.sort((a,b) => b.date.localeCompare(a.date));
                     
-                    div.innerHTML = `<div class="date-head">Lottery Result - ${item.date}</div><div class="res-row">${resultsHtml}</div>`;
-                    list.appendChild(div);
+                    data.forEach(item => {
+                        const div = document.createElement('a');
+                        div.href = `/result.html?date=${item.date}`;
+                        div.className = 'date-card';
+                        
+                        let resultsHtml = '';
+                        if (item.results && item.results.length > 0) {
+                            item.results.forEach(r => {
+                                resultsHtml += `<div><span class="res-badge b-${r.slotkey}">${r.slotkey.toUpperCase()}</span> <strong>${r.num}</strong></div>`;
+                            });
+                        } else {
+                            resultsHtml = 'Click to view results';
+                        }
+                        
+                        div.innerHTML = `<div class="date-head">Lottery Result - ${item.date}</div><div class="res-row">${resultsHtml}</div>`;
+                        list.appendChild(div);
+                    });
+                })
+                .catch(err => {
+                    list.innerHTML = `<p style="color:red;">${err.message}. Make sure backfill has run.</p>`;
                 });
-            })
-            .catch(err => {
-                document.getElementById('history-list').innerHTML = `<p style="color:red;">Error loading history.</p>`;
-            });
+        }
+        // Load current month on page open
+        loadHistory();
     </script>
 </body>
 </html>
