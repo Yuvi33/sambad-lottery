@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sambad-lottery.pages.dev/sitemap.xml
