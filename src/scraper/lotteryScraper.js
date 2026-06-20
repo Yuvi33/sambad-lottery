@@ -24,10 +24,15 @@ async function fetchDraw(dateKey, drawId, slotkey) {
             const parts = dateKey.split('-');
             const displayDate = `${parts[0]} ${months[parseInt(parts[1])-1]} ${parts[2]}`;
             
+            // Get the series and number separately, then combine them
+            const series = res.data.series || '';
+            const ticketNum = firstPrize.nums[0] || 'N/A';
+            const fullNum = series ? `${series} ${ticketNum}` : ticketNum;
+            
             return {
                 slotkey: slotkey,
                 date: displayDate,
-                num: firstPrize.nums[0] || 'N/A',
+                num: fullNum, // Now properly formatted as "76K 21365"
                 amount: "1 Crore",
                 name: "Dear Lottery",
                 drawno: drawId,
