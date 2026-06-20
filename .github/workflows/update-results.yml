@@ -2,14 +2,20 @@ name: Update Lottery Results
 
 on:
   schedule:
-    - cron: '30 8 * * *'
-    - cron: '30 13 * * *'
-    - cron: '30 15 * * *'
+    # 1 PM Draw -> Runs at 1:02 PM & 1:20 PM IST (UTC: 07:32 & 07:50)
+    - cron: '32 7 * * *'
+    - cron: '50 7 * * *'
+    # 6 PM Draw -> Runs at 6:02 PM & 6:20 PM IST (UTC: 12:32 & 12:50)
+    - cron: '32 12 * * *'
+    - cron: '50 12 * * *'
+    # 8 PM Draw -> Runs at 8:02 PM & 8:20 PM IST (UTC: 14:32 & 14:50)
+    - cron: '32 14 * * *'
+    - cron: '50 14 * * *'
   workflow_dispatch:
 
 permissions:
   contents: write 
-  deployments: write # Fixes the 403 Cloudflare deployment error
+  deployments: write
 
 jobs:
   scrape-and-update:
@@ -20,7 +26,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24' # Updated to fix deprecation warning
+          node-version: '24'
           
       - name: Install dependencies
         run: npm install
