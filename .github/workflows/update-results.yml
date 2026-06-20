@@ -9,7 +9,7 @@ on:
 
 permissions:
   contents: write 
-  deployments: write # <--- THIS FIXES THE 403 ERROR
+  deployments: write # Fixes the 403 Cloudflare deployment error
 
 jobs:
   scrape-and-update:
@@ -20,7 +20,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24' # <--- UPDATED TO FIX NODE DEPRECATION WARNING
+          node-version: '24' # Updated to fix deprecation warning
           
       - name: Install dependencies
         run: npm install
