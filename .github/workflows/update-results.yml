@@ -2,15 +2,10 @@ name: Update Lottery Results
 
 on:
   schedule:
-    # 1 PM Draw -> Runs at 1:02 PM & 1:20 PM IST (UTC: 07:32 & 07:50)
-    - cron: '32 7 * * *'
-    - cron: '50 7 * * *'
-    # 6 PM Draw -> Runs at 6:02 PM & 6:20 PM IST (UTC: 12:32 & 12:50)
-    - cron: '32 12 * * *'
-    - cron: '50 12 * * *'
-    # 8 PM Draw -> Runs at 8:02 PM & 8:20 PM IST (UTC: 14:32 & 14:50)
-    - cron: '32 14 * * *'
-    - cron: '50 14 * * *'
+    # Runs every 15 minutes from 12:00 PM to 10:45 PM IST
+    # 12:00 PM IST = 6:30 AM UTC
+    # 10:45 PM IST = 5:15 PM UTC
+    - cron: '*/15 6-17 * * *'
   workflow_dispatch:
 
 permissions:
