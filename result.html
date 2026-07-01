@@ -6,8 +6,10 @@
     <title>Lottery Sambad Result</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}body{font:16px/1.7 system-ui,sans-serif;color:#333;background:#fff}
-        nav{background:#e63223;padding:15px 0;text-align:center}
-        nav a{color:#fff;font-weight:800;font-size:24px;text-decoration:none;text-transform:uppercase}
+        a{color:#2563eb;text-decoration:underline}
+        nav{background:#e63223;padding:15px 0}.nav-in{max-width:900px;margin:0 auto;padding:0 16px;display:flex;justify-content:space-between;align-items:center}
+        .nav-logo{color:#fff;font-weight:800;font-size:24px;text-transform:uppercase;text-decoration:none}
+        .nav-link{color:#fff;font-weight:700;text-decoration:none;background:rgba(0,0,0,.2);padding:8px 15px;border-radius:5px}
         .w{max-width:800px;margin:0 auto;padding:20px}
         .result-card{background:#fff;border:1px solid #e3e7ec;border-radius:8px;padding:20px;margin:15px auto;text-align:center;max-width:500px}
         .time-badge{display:inline-block;font-size:14px;font-weight:800;padding:6px 12px;border-radius:9px;margin-bottom:10px}
@@ -17,11 +19,27 @@
         .slot-1pm{background:#f6fbef}.slot-1pm .win-num{color:#138808}.slot-1pm .time-badge{background:#16a34a;color:#ffdd00}
         .slot-6pm{background:#e3eefb}.slot-6pm .win-num{color:#100177}.slot-6pm .time-badge{background:#f5c518;color:#dc2626}
         .slot-8pm{background:#fef6f6}.slot-8pm .win-num{color:#dc2626}.slot-8pm .time-badge{background:#dc2626;color:#ffdd00}
-        .ad-slot{width:100%;min-height:90px;background:#f1f1f1;display:flex;align-items:center;justify-content:center;color:#888;margin:20px 0;border-radius:8px}
+        
+        /* Full Result Tiers */
+        .tiers-container{text-align:left;margin-top:20px;border-top:1px solid #eee;padding-top:20px}
+        .tier-box{background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:15px;margin-bottom:15px}
+        .tier-head{display:flex;justify-content:space-between;border-bottom:1px dashed #ccc;padding-bottom:8px;margin-bottom:10px}
+        .tier-label{font-weight:800;color:#333;font-size:16px}
+        .tier-amt{font-weight:800;color:#138808}
+        .tier-nums{display:flex;flex-wrap:wrap;gap:8px}
+        .tier-num{font-family:monospace;font-weight:700;background:#fff;border:1px solid #ddd;padding:4px 8px;border-radius:4px;font-size:14px}
+        .last4-note{font-size:12px;color:#666;margin-top:5px;font-style:italic}
+        
+        .ad-slot{width:100%;min-height:90px;background:#f1f1f1;display:flex;align-items:center;justify-content:center;color:#888;margin:20px 0;border-radius:8px;font-size:0.9rem}
     </style>
 </head>
 <body>
-    <nav><a href="/">Lottery Sambad</a></nav>
+    <nav>
+        <div class="nav-in">
+            <a href="/" class="nav-logo">Lottery Sambad</a>
+            <a href="/old.html" class="nav-link">Old Results</a>
+        </div>
+    </nav>
 
     <div class="w">
         <div class="ad-slot">Advertisement</div>
@@ -32,6 +50,13 @@
     </div>
 
     <script>
+        function formatAmount(amt) {
+            amt = parseInt(amt);
+            if (amt >= 10000000) return `₹${amt/10000000} Crore`;
+            if (amt >= 100000) return `₹${amt/100000} Lakh`;
+            return `₹${amt.toLocaleString('en-IN')}`;
+        }
+
         const params = new URLSearchParams(window.location.search);
         const date = params.get('date');
         const contentDiv = document.getElementById('result-content');
@@ -41,20 +66,50 @@
         } else {
             document.title = `Lottery Sambad Result ${date}`;
             
-            fetch(`/data/history/${date}.json`)
+            // Extract YYYY-MM from dd-mm-yyyy
+            const parts = date.split('-');
+            const monthKey = `${parts[2]}-${parts[1]}`;
+            
+            // Fetch the MONTHLY file (e.g., 2026-06.json)
+            fetch(`/data/history/${monthKey}.json`)
                 .then(response => {
                     if(!response.ok) throw new Error('Result file not found');
                     return response.json();
                 })
-                .then(data => {
+                .then(monthData => {
+                    // Find the specific day's data inside the monthly file
+                    const dayData = monthData.find(item => item.date === date);
+                    if (!dayData) throw new Error('Date not found in history');
+                    
                     let html = `<h2 style="margin-bottom:20px;">Lottery Result for ${date}</h2>`;
-                    data.forEach(result => {
+                    
+                    // Loop through 1pm, 6pm, 8pm
+                    dayData.results.forEach(result => {
+                        let tiersHtml = '';
+                        if (result.tiers && result.tiers.length > 0) {
+                            tiersHtml = '<div class="tiers-container">';
+                            result.tiers.forEach(tier => {
+                                let numsHtml = tier.nums.map(n => `<span class="tier-num">${n}</span>`).join('');
+                                tiersHtml += `
+                                    <div class="tier-box">
+                                        <div class="tier-head">
+                                            <span class="tier-label">${tier.label}</span>
+                                            <span class="tier-amt">${formatAmount(tier.amt)}</span>
+                                        </div>
+                                        <div class="tier-nums">${numsHtml}</div>
+                                        ${tier.last4 ? '<div class="last4-note">(Last 4 digits)</div>' : ''}
+                                    </div>`;
+                            });
+                            tiersHtml += '</div>';
+                        }
+
                         html += `
                             <div class="result-card slot-${result.slotkey}">
-                                <div class="time-badge">${result.badge || result.slotkey}</div>
+                                <div class="time-badge">${result.slotkey.toUpperCase()}</div>
                                 <div class="win-num">${result.num}</div>
                                 <div class="prize-text">1st Prize: ${result.amount}</div>
                                 <div class="meta-text">Draw No. ${result.drawno} · Dear ${result.name}</div>
+                                ${tiersHtml}
                             </div>
                         `;
                     });
