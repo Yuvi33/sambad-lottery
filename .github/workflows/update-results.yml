@@ -3,18 +3,15 @@ name: Update Lottery Results
 on:
   schedule:
     # Runs every 15 minutes from 12:00 PM to 10:45 PM IST
-    # 12:00 PM IST = 6:30 AM UTC
-    # 10:45 PM IST = 5:15 PM UTC
     - cron: '*/15 6-17 * * *'
   workflow_dispatch:
 
 permissions:
   contents: write 
-  deployments: write
 
 jobs:
   scrape-and-update:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       
@@ -38,10 +35,7 @@ jobs:
           git push
 
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: sambad-lottery 
-          directory: .
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx wrangler pages deploy . --project-name=sambad-lottery --branch=main
